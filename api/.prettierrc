@@ -1,0 +1,33 @@
+{
+  "parser": "babylon",
+  "singleQuote": true,
+  "useTabs": false,
+  "tabWidth": 2,
+  "bracketSpacing": true,
+  "semi": true,
+  "trailingComma": "all",
+  "printWidth": 80,
+  "overrides": [
+    {
+      "files": "*.ts",
+      "options": { "parser": "typescript" }
+    },
+
+    {
+      "files": "*.tsx",
+      "options": { "parser": "typescript" }
+    },
+    {
+      "files": ["*.json", "*.json.*"],
+      "options": { "parser": "json" }
+    },
+    {
+      "files": ".prettierrc",
+      "options": { "parser": "json" }
+    },
+    {
+      "files": ".babelrc",
+      "options": { "parser": "json" }
+    }
+  ]
+}

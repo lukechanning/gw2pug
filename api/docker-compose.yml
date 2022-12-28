@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run dev
+    ports:
+        - "4000:4000"
+        - "9230:9229"
+    volumes:
+        - ./:/var/www/app
+        - /var/www/app/node_modules
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: gw2pug
+      POSTGRES_DB: gw2pug-core 
+      POSTGRES_PASSWORD: dolyakmilk
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

@@ -41,8 +41,5 @@ app.get('/', (_: Request, res: Response) => {
   res.send('Express + TypeScript Server');
 });
 
-// app.listen(port, () => {
-//   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
-// });
-await new Promise((resolve) => httpServer.listen({ port }, resolve));
+await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
 console.log(`🚀 Server ready at http://localhost:${port}`);

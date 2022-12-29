@@ -1,13 +1,11 @@
-import express, { Express, Request, Response } from 'express';
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import express, { Express, Request, Response } from 'express';
 import http from 'http';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import dotenv from 'dotenv';
-
-dotenv.config();
+import env from './env/sharedEnv.js';
 
 // The GraphQL schema
 const typeDefs = `#graphql
@@ -25,21 +23,28 @@ const resolvers = {
 
 const app: Express = express();
 const httpServer = http.createServer(app);
-const port = process.env.PORT || 3000;
 
-// Set up Apollo Server
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-});
-await server.start();
+// contain the powerful magics
+const bootstrap = async () => {
+  // Set up Apollo Server
+  const server = new ApolloServer({
+    typeDefs,
+    resolvers,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
+  await server.start();
 
-app.use('/graphql', cors(), bodyParser.json(), expressMiddleware(server));
+  app.use(cors(), bodyParser.json(), expressMiddleware(server));
 
-app.get('/', (_: Request, res: Response) => {
-  res.send('Express + TypeScript Server');
-});
+  app.get('/', (_: Request, res: Response) => {
+    res.send('Express + TypeScript Server');
+  });
 
-await new Promise<void>((resolve) => httpServer.listen({ port }, resolve));
-console.log(`🚀 Server ready at http://localhost:${port}`);
+  await new Promise<void>((resolve) =>
+    httpServer.listen({ port: env.SERVER_PORT }, resolve),
+  );
+  console.log(`🚀 Server ready at http://localhost:4000`);
+};
+
+// fire it up!
+bootstrap();
